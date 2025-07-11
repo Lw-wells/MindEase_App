@@ -62,7 +62,7 @@ lib/
 │   └── mood_journal_screen.dart
 ├── theme/
 │   └── theme_provider.dart   # Dark mode state management
-└── models/                   # (If applicable) Data models for future use
+
 ```
 
 ---
