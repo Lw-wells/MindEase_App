@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CounselorScreen extends StatefulWidget {
   final void Function(String) onNavigate;
@@ -25,41 +26,99 @@ class _CounselorScreenState extends State<CounselorScreen> {
   final List<Map<String, dynamic>> counselors = [
     {
       'id': 1,
-      'name': 'Dr. Sarah Chen',
+      'name': 'Dr. Esther Mwanzia',
       'specialty': 'Anxiety & Depression',
       'rating': 4.9,
       'experience': '8 years',
-      'image': null,
+      'image': 'assets/images/dr_sarah.jpg',
       'available': true,
+      'email': 'mwanzia.es@NairobiHospital.org',
+      'phone': '+254757038269',
+      'whatsapp': '+254757038269',
     },
     {
       'id': 2,
-      'name': 'Dr. Michael Rodriguez',
+      'name': 'Dr. Michael Oginga',
       'specialty': 'Youth Therapy',
       'rating': 4.8,
       'experience': '6 years',
-      'image': null,
+      'image': 'assets/images/dr_michael.jpg',
       'available': true,
+      'email': 'michael.Og@muthaigaHospital.org',
+      'phone': '+254757038269',
+      'whatsapp': '+254757038269',
     },
     {
       'id': 3,
-      'name': 'Dr. Emily Johnson',
+      'name': 'Dr. Emily Kerubo',
       'specialty': 'Trauma & PTSD',
       'rating': 4.9,
       'experience': '10 years',
-      'image': null,
+      'image': 'assets/images/dr_emily.jpg',
       'available': false,
+      'email': 'emily.ke@equityafya.org',
+      'phone': '+254757038269',
+      'whatsapp': '+254757038269',
     },
     {
       'id': 4,
-      'name': 'Dr. David Kim',
+      'name': 'Dr. Stanley Wells',
       'specialty': 'Relationship Counseling',
       'rating': 4.7,
       'experience': '5 years',
-      'image': null,
+      'image': 'assets/images/dr_david.jpg',
       'available': true,
+      'email': 'wells.stan@ruaifamilyConsultants',
+      'phone': '+254757038269',
+      'whatsapp': '+254757038269',
     },
   ];
+
+  Future<void> _sendEmail(String email) async {
+    final uri = Uri(
+      scheme: 'mailto',
+      path: email,
+      query: Uri.encodeFull(
+        'subject=Consultation Request&body=Hi, I would like to consult with you.',
+      ),
+    );
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open email client.')),
+      );
+    }
+  }
+
+  void _showPhoneDialog(String name, String phone) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Contact $name'),
+        content: Text('Phone: $phone'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _openWhatsApp(String phoneNumber, String message) async {
+    final url = Uri.parse(
+      'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+    );
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Could not open WhatsApp.')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +143,6 @@ class _CounselorScreenState extends State<CounselorScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Header
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -108,8 +166,6 @@ class _CounselorScreenState extends State<CounselorScreen> {
                   ],
                 ),
               ),
-
-              // Search bar
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: TextField(
@@ -125,8 +181,6 @@ class _CounselorScreenState extends State<CounselorScreen> {
                   ),
                 ),
               ),
-
-              // Specialty Chips
               Container(
                 height: 48,
                 margin: const EdgeInsets.symmetric(vertical: 12),
@@ -154,8 +208,6 @@ class _CounselorScreenState extends State<CounselorScreen> {
                   },
                 ),
               ),
-
-              // Counselors List
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -176,9 +228,7 @@ class _CounselorScreenState extends State<CounselorScreen> {
                           children: [
                             CircleAvatar(
                               radius: 32,
-                              backgroundImage: AssetImage(
-                                'assets/images/placeholder.png',
-                              ),
+                              backgroundImage: AssetImage(counselor['image']),
                             ),
                             const SizedBox(width: 16),
                             Expanded(
@@ -257,12 +307,18 @@ class _CounselorScreenState extends State<CounselorScreen> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 8),
+                                  const SizedBox(height: 12),
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Expanded(
                                         child: ElevatedButton.icon(
-                                          onPressed: available ? () {} : null,
+                                          onPressed: available
+                                              ? () => _sendEmail(
+                                                  counselor['email'],
+                                                )
+                                              : null,
                                           icon: const Icon(
                                             LucideIcons.messageCircle,
                                             size: 16,
@@ -281,15 +337,56 @@ class _CounselorScreenState extends State<CounselorScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: 8),
-                                      IconButton(
-                                        icon: const Icon(LucideIcons.phone),
-                                        onPressed: available ? () {} : null,
-                                        color: const Color(0xFF0284C7),
+                                      Expanded(
+                                        child: ElevatedButton.icon(
+                                          onPressed: available
+                                              ? () => _showPhoneDialog(
+                                                  counselor['name'],
+                                                  counselor['phone'],
+                                                )
+                                              : null,
+                                          icon: const Icon(
+                                            LucideIcons.phone,
+                                            size: 16,
+                                          ),
+                                          label: const Text("Call"),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color(
+                                              0xFF10B981,
+                                            ),
+                                            foregroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      IconButton(
-                                        icon: const Icon(LucideIcons.mail),
-                                        onPressed: available ? () {} : null,
-                                        color: const Color(0xFF0284C7),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: ElevatedButton.icon(
+                                          onPressed: available
+                                              ? () => _openWhatsApp(
+                                                  counselor['whatsapp'],
+                                                  'Hello ${counselor['name']}, I would like to consult with you.',
+                                                )
+                                              : null,
+                                          icon: const Icon(
+                                            LucideIcons.messageSquare,
+                                            size: 16,
+                                          ),
+                                          label: const Text("WhatsApp"),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color(
+                                              0xFF22C55E,
+                                            ),
+                                            foregroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),

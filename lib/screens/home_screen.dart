@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // 🧩 Import reusable components from widgets
 import '../widgets/gradient_card.dart';
@@ -12,10 +13,10 @@ class HomeScreen extends StatelessWidget {
   final bool isAnonymous;
 
   const HomeScreen({
-    Key? key,
+    super.key,
     required this.userName,
     required this.isAnonymous,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

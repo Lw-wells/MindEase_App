@@ -1,186 +1,152 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+// ignore: depend_on_referenced_packages
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  final VoidCallback onComplete;
-
-  const OnboardingScreen({super.key, required this.onComplete});
+  const OnboardingScreen({super.key, required Null Function() onComplete});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+  final controller = PageController();
   int currentPage = 0;
 
-  final List<Map<String, dynamic>> pages = [
+  final pages = [
     {
-      'icon': LucideIcons.heart,
-      'title': 'Welcome to MindEase',
-      'description':
-          'Get emotional support through AI-powered conversations and connect with real counselors when you need them most.',
-      'illustration': '🤗',
-      'color': Color(0xFF0EA5E9), // sky-500
+      "title": "Welcome to MindEase",
+      "subtitle": "Your mental wellness companion is here.",
+      "image": "assets/images/onboarding1.jpg",
     },
     {
-      'icon': LucideIcons.shield,
-      'title': 'Your Privacy Matters',
-      'description':
-          'Your conversations are confidential and secure. We prioritize your anonymity and data protection above all else.',
-      'illustration': '🔒',
-      'color': Color(0xFF10B981), // emerald-500
+      "title": "Track Your Mood",
+      "subtitle": "Understand yourself better with daily check-ins.",
+      "image": "assets/images/trackmood.jpg",
     },
     {
-      'icon': LucideIcons.userPlus,
-      'title': 'Get Started',
-      'description':
-          "Choose how you'd like to begin your mental wellness journey with us.",
-      'illustration': '🌱',
-      'color': Color(0xFF8B5CF6), // lavender-500
+      "title": "Talk to Experts",
+      "subtitle": "Access professional support anytime, anywhere.",
+      "image": "assets/images/experttalk.jpg",
     },
   ];
 
-  void nextPage() {
-    if (currentPage < pages.length - 1) {
-      setState(() => currentPage++);
-    }
-  }
-
-  void prevPage() {
-    if (currentPage > 0) {
-      setState(() => currentPage--);
-    }
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final page = pages[currentPage];
-
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFF0F9FF), Color(0xFFF5F3FF)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      backgroundColor: Colors.white,
+      body: SafeArea(
         child: Column(
           children: [
             Expanded(
-              child: Center(
-                child: Card(
-                  elevation: 6,
-                  color: Colors.white.withOpacity(0.8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 32,
-                    ),
+              child: PageView.builder(
+                controller: controller,
+                itemCount: pages.length,
+                onPageChanged: (index) {
+                  setState(() => currentPage = index);
+                },
+                itemBuilder: (context, index) {
+                  final page = pages[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(24.0),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Image.asset(page["image"]!, height: 250),
+                        const SizedBox(height: 32),
                         Text(
-                          page['illustration'],
-                          style: const TextStyle(fontSize: 48),
-                        ),
-                        const SizedBox(height: 24),
-                        Icon(page['icon'], size: 64, color: page['color']),
-                        const SizedBox(height: 24),
-                        Text(
-                          page['title'],
-                          textAlign: TextAlign.center,
+                          page["title"]!,
                           style: const TextStyle(
-                            fontSize: 22,
+                            fontSize: 28,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF1E293B),
+                            color: Color(0xFF0F172A),
                           ),
+                          textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          page['description'],
-                          textAlign: TextAlign.center,
+                          page["subtitle"]!,
                           style: const TextStyle(
-                            fontSize: 15,
-                            color: Color(0xFF475569),
+                            fontSize: 16,
+                            color: Color(0xFF64748B),
                           ),
+                          textAlign: TextAlign.center,
                         ),
-                        if (currentPage == pages.length - 1) ...[
-                          const SizedBox(height: 32),
-                          ElevatedButton(
-                            onPressed: widget.onComplete,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF0EA5E9),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              minimumSize: const Size.fromHeight(50),
-                            ),
-                            child: const Text("Use Anonymously"),
-                          ),
-                          const SizedBox(height: 12),
-                          OutlinedButton(
-                            onPressed: widget.onComplete,
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: const Color(0xFF0EA5E9),
-                              side: const BorderSide(color: Color(0xFFBAE6FD)),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              minimumSize: const Size.fromHeight(50),
-                            ),
-                            child: const Text("Sign In with Email/Google"),
-                          ),
-                        ],
                       ],
                     ),
+                  );
+                },
+              ),
+            ),
+            SmoothPageIndicator(
+              controller: controller,
+              count: pages.length,
+              effect: const WormEffect(
+                activeDotColor: Color(0xFF0EA5E9),
+                dotColor: Color(0xFFE0F2FE),
+                dotHeight: 12,
+                dotWidth: 12,
+              ),
+            ),
+            const SizedBox(height: 24),
+            if (currentPage == pages.length - 1) ...[
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/home');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF0EA5E9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: const Text("Use Anonymously"),
+              ),
+              const SizedBox(height: 12),
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/auth');
+                },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF0EA5E9),
+                  side: const BorderSide(color: Color(0xFFBAE6FD)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: const Text("Sign In or Sign Up"),
+              ),
+              const SizedBox(height: 24),
+            ] else ...[
+              TextButton(
+                onPressed: () {
+                  controller.nextPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: const Text(
+                  "Next",
+                  style: TextStyle(
+                    color: Color(0xFF0EA5E9),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
-            ),
-
-            // Bottom navigation
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: prevPage,
-                  icon: const Icon(LucideIcons.chevronLeft, size: 20),
-                  color: currentPage > 0
-                      ? const Color(0xFF475569)
-                      : Colors.grey[300],
-                ),
-                Row(
-                  children: List.generate(
-                    pages.length,
-                    (index) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: currentPage == index
-                            ? const Color(0xFF0EA5E9)
-                            : Colors.grey[400],
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: nextPage,
-                  icon: const Icon(LucideIcons.chevronRight, size: 20),
-                  color: currentPage < pages.length - 1
-                      ? const Color(0xFF475569)
-                      : Colors.grey[300],
-                ),
-              ],
-            ),
+              const SizedBox(height: 24),
+            ],
           ],
         ),
       ),

@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:mindease/screens/auth_screen.dart';
 import 'package:provider/provider.dart';
-import 'theme/theme_provider.dart'; // Adjust the path if needed
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart'; // Make sure this file exists
+
+import 'theme/theme_provider.dart';
 import 'package:mindease/screens/splash_screen.dart';
 import 'package:mindease/screens/onboarding_screen.dart';
 import 'package:mindease/screens/home_screen.dart';
@@ -11,8 +17,14 @@ import 'package:mindease/screens/settings_screen.dart';
 import 'package:mindease/screens/resources_screen.dart';
 import 'package:mindease/screens/emergency_screen.dart';
 import 'package:mindease/screens/mood_journal_screen.dart';
+import 'package:mindease/screens/login_screen.dart';
+import 'package:mindease/screens/signup_screen.dart';
+import 'package:mindease/screens/auth_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Required before Firebase init
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
@@ -55,6 +67,10 @@ class MindEaseApp extends StatelessWidget {
             Navigator.pushReplacementNamed(context, '/home');
           },
         ),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen(),
+        '/auth': (context) => const AuthScreen(),
+
         '/home': (context) =>
             const HomeScreen(userName: "Guest", isAnonymous: true),
         '/counselor': (context) => CounselorScreen(

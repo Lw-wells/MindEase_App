@@ -1,10 +1,27 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmergencyScreen extends StatelessWidget {
   final void Function(String) onNavigate;
 
-  const EmergencyScreen({Key? key, required this.onNavigate}) : super(key: key);
+  const EmergencyScreen({super.key, required this.onNavigate});
+
+  void _makePhoneCall(String number) async {
+    final uri = Uri.parse('tel:$number');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+
+  void _sendCrisisText() async {
+    final uri = Uri.parse('sms:741741?body=HOME');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +109,7 @@ class EmergencyScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton.icon(
-                      onPressed: () {
-                        // call 988
-                      },
+                      onPressed: () => _makePhoneCall("988"),
                       icon: const Icon(
                         LucideIcons.phone,
                         color: Color(0xFFDC2626),
@@ -111,9 +126,7 @@ class EmergencyScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     OutlinedButton.icon(
-                      onPressed: () {
-                        // text crisis line
-                      },
+                      onPressed: _sendCrisisText,
                       icon: const Icon(
                         LucideIcons.messageCircle,
                         color: Colors.white,
@@ -201,13 +214,13 @@ class EmergencyScreen extends StatelessWidget {
                       onPressed: () {
                         final number = contact["number"]!;
                         if (RegExp(r"^\d").hasMatch(number)) {
-                          // Make phone call with: launchUrl(Uri.parse("tel:$number"));
+                          _makePhoneCall(number);
                         }
                       },
                     ),
                   ),
                 );
-              }).toList(),
+              }),
 
               const SizedBox(height: 24),
 
@@ -236,9 +249,7 @@ class EmergencyScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       ElevatedButton(
-                        onPressed: () {
-                          // Navigate to safety plan setup
-                        },
+                        onPressed: () => onNavigate("safety_plan"),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0EA5E9),
                           shape: RoundedRectangleBorder(

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "469057146515",
+    "project_id": "mindease-medicalchatbot",
+    "storage_bucket": "mindease-medicalchatbot.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469057146515:android:c9b88c9097208f020ec766",
+        "android_client_info": {
+          "package_name": "com.example.mindease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVaRIgRQbdbPgKRqq5xbX6ffe14ykPgsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

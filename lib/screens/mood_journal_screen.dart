@@ -4,8 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 class MoodJournalScreen extends StatefulWidget {
   final void Function(String) onNavigate;
 
-  const MoodJournalScreen({Key? key, required this.onNavigate})
-    : super(key: key);
+  const MoodJournalScreen({super.key, required this.onNavigate});
 
   @override
   State<MoodJournalScreen> createState() => _MoodJournalScreenState();
@@ -372,7 +371,7 @@ class _MoodJournalScreenState extends State<MoodJournalScreen> {
                             ],
                           ),
                         );
-                      }).toList(),
+                      }),
                     ],
                   ),
                 ),

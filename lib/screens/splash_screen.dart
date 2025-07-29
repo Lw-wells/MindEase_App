@@ -4,7 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../widgets/animated_dots.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();

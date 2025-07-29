@@ -1,10 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ResourcesScreen extends StatefulWidget {
   final void Function(String) onNavigate;
 
-  const ResourcesScreen({Key? key, required this.onNavigate}) : super(key: key);
+  const ResourcesScreen({super.key, required this.onNavigate});
 
   @override
   State<ResourcesScreen> createState() => _ResourcesScreenState();
@@ -19,17 +22,19 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
       'title': '5-Minute Breathing Exercise',
       'category': 'Stress',
       'type': 'audio',
-      'duration': '5 min',
+      'duration': '6 min 34 secs',
       'icon': LucideIcons.headphones,
       'description': 'Quick breathing technique to reduce anxiety',
+      'url': 'https://youtu.be/9fEo9my03Ks?si=YIM-YmW98cgZkU40',
     },
     {
       'title': 'Sleep Better Tonight',
       'category': 'Sleep',
       'type': 'video',
-      'duration': '12 min',
+      'duration': '10 min 1 sec',
       'icon': LucideIcons.video,
       'description': 'Guided meditation for better sleep quality',
+      'url': 'https://youtu.be/aEqlQvczMJQ?si=4PvosAWCGQ0bgNNd',
     },
     {
       'title': 'Understanding Depression',
@@ -38,6 +43,7 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
       'duration': '8 min read',
       'icon': LucideIcons.bookOpen,
       'description': 'Learn about depression symptoms and coping strategies',
+      'url': 'https://my.clevelandclinic.org/health/diseases/9290-depression',
     },
     {
       'title': 'Journaling for Mental Health',
@@ -46,22 +52,26 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
       'duration': '10 min read',
       'icon': LucideIcons.bookOpen,
       'description': 'How to start and maintain a mental health journal',
+      'url':
+          'https://www.helpguide.org/mental-health/wellbeing/journaling-for-mental-health-and-wellness',
     },
     {
       'title': 'Progressive Muscle Relaxation',
       'category': 'Stress',
       'type': 'audio',
-      'duration': '15 min',
+      'duration': '9 min 5 secs',
       'icon': LucideIcons.headphones,
       'description': 'Full body relaxation technique',
+      'url': 'https://youtu.be/SNqYG95j_UQ?si=wWitaykih6SYxKdz',
     },
     {
       'title': 'Coping with Anxiety',
       'category': 'Anxiety',
       'type': 'video',
-      'duration': '18 min',
+      'duration': '7 min 18 secs',
       'icon': LucideIcons.video,
       'description': 'Practical strategies for managing anxiety',
+      'url': 'https://youtu.be/FpiWSFcL3-c?si=qXjnZ_W_v9BOURnI',
     },
   ];
 
@@ -287,13 +297,22 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
                               LucideIcons.play,
                               color: Color(0xFF0EA5E9),
                             ),
-                            onPressed: () {
-                              // play logic or show dialog
+                            onPressed: () async {
+                              final url = resource['url'];
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Could not open resource'),
+                                  ),
+                                );
+                              }
                             },
                           ),
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
