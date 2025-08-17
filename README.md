@@ -9,6 +9,8 @@ This guide explains how to **set up**, **run**, and **understand** the structure
 
 ---
 
+## Live Link: https://mindease-medicalchatbot.web.app
+
 ## 🚀 Getting Started
 
 ### 1. Prerequisites
