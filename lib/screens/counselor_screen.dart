@@ -235,42 +235,133 @@ class _CounselorScreenState extends State<CounselorScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        counselor['name'],
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: available
-                                              ? const Color(0xFFD1FAE5)
-                                              : const Color(0xFFF1F5F9),
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          available ? 'Available' : 'Busy',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: available
-                                                ? const Color(0xFF047857)
-                                                : const Color(0xFF475569),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  // Wrap(
+                                  //   spacing: 8,
+                                  //   runSpacing: 8,
+                                  //   alignment: WrapAlignment.center,
+                                  //   children: [
+                                  //     SizedBox(
+                                  //       width:
+                                  //           MediaQuery.of(context).size.width /
+                                  //           3.2,
+                                  //       child: ElevatedButton.icon(
+                                  //         onPressed: available
+                                  //             ? () => _sendEmail(
+                                  //                 counselor['email'],
+                                  //               )
+                                  //             : null,
+                                  //         icon: const Icon(
+                                  //           LucideIcons.messageCircle,
+                                  //           size: 16,
+                                  //         ),
+                                  //         label: const Text("Message"),
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           backgroundColor: const Color(
+                                  //             0xFF0EA5E9,
+                                  //           ),
+                                  //           foregroundColor: Colors.white,
+                                  //           shape: RoundedRectangleBorder(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(30),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width:
+                                  //           MediaQuery.of(context).size.width /
+                                  //           3.2,
+                                  //       child: ElevatedButton.icon(
+                                  //         onPressed: available
+                                  //             ? () => _showPhoneDialog(
+                                  //                 counselor['name'],
+                                  //                 counselor['phone'],
+                                  //               )
+                                  //             : null,
+                                  //         icon: const Icon(
+                                  //           LucideIcons.phone,
+                                  //           size: 16,
+                                  //         ),
+                                  //         label: const Text("Call"),
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           backgroundColor: const Color(
+                                  //             0xFF10B981,
+                                  //           ),
+                                  //           foregroundColor: Colors.white,
+                                  //           shape: RoundedRectangleBorder(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(30),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width:
+                                  //           MediaQuery.of(context).size.width /
+                                  //           3.2,
+                                  //       child: ElevatedButton.icon(
+                                  //         onPressed: available
+                                  //             ? () => _openWhatsApp(
+                                  //                 counselor['whatsapp'],
+                                  //                 'Hello ${counselor['name']}, I would like to consult with you.',
+                                  //               )
+                                  //             : null,
+                                  //         icon: const Icon(
+                                  //           LucideIcons.messageSquare,
+                                  //           size: 16,
+                                  //         ),
+                                  //         label: const Text("WhatsApp"),
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           backgroundColor: const Color(
+                                  //             0xFF22C55E,
+                                  //           ),
+                                  //           foregroundColor: Colors.white,
+                                  //           shape: RoundedRectangleBorder(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(30),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceBetween,
+                                  //   children: [
+                                  //     Text(
+                                  //       counselor['name'],
+                                  //       style: const TextStyle(
+                                  //         fontWeight: FontWeight.w600,
+                                  //         fontSize: 16,
+                                  //       ),
+                                  //     ),
+                                  //     Container(
+                                  //       padding: const EdgeInsets.symmetric(
+                                  //         horizontal: 8,
+                                  //         vertical: 4,
+                                  //       ),
+                                  //       decoration: BoxDecoration(
+                                  //         color: available
+                                  //             ? const Color(0xFFD1FAE5)
+                                  //             : const Color(0xFFF1F5F9),
+                                  //         borderRadius: BorderRadius.circular(
+                                  //           12,
+                                  //         ),
+                                  //       ),
+                                  //       child: Text(
+                                  //         available ? 'Available' : 'Busy',
+                                  //         style: TextStyle(
+                                  //           fontSize: 12,
+                                  //           color: available
+                                  //               ? const Color(0xFF047857)
+                                  //               : const Color(0xFF475569),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   Text(
                                     counselor['specialty'],
                                     style: const TextStyle(
@@ -336,7 +427,7 @@ class _CounselorScreenState extends State<CounselorScreen> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(width: 8),
+                                      const SizedBox(width: 3),
                                       Expanded(
                                         child: ElevatedButton.icon(
                                           onPressed: available
@@ -362,7 +453,7 @@ class _CounselorScreenState extends State<CounselorScreen> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(width: 8),
+                                      const SizedBox(width: 3),
                                       Expanded(
                                         child: ElevatedButton.icon(
                                           onPressed: available
